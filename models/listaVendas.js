@@ -3,17 +3,17 @@
 const moment = require("moment")  // formata as datas
 const conexao = require("../infraestrutura/conexao")
 
-class Atendimento{
-    adiciona(atendimento, res){
+class Venda{
+    adiciona(venda, res){
         const dataCriacao = moment().format("YYYY-MM-DD HH:MM:SS")
 
-        const clienteEhValido = atendimento.cliente.length >= 5
+        const clienteEhValido = venda.cliente.length >= 4
 
         const validacoes = [                    //validações de entrada
             {
                 nome: "cliente",
                 valido: clienteEhValido,
-                mensagem: "Cliente deve ter pelo menos cinco caracteres"
+                mensagem: "Cliente deve ter pelo menos quatro caracteres"
             }
         ]
 
@@ -23,10 +23,10 @@ class Atendimento{
             res.status(400).json(erros)
         } else {
         
-        const atendimentoDatado = {...atendimento, dataCriacao}
+        const vendaDatada = {...venda, dataCriacao}
         const sql = "INSERT INTO Listas SET ?"
 
-        conexao.query(sql, atendimentoDatado, atendimento, (erro, resultados) => {
+        conexao.query(sql, vendaDatada, venda, (erro, resultados) => {
             if(erro){
                 res.status(400).json(erro)
             } else {
@@ -56,11 +56,11 @@ class Atendimento{
         const sql = `SELECT * FROM Listas WHERE id = ${id}`
 
         conexao.query(sql, (erro, resultados) =>{
-            const atendimento = resultados[0]
+            const venda = resultados[0]
             if(erro) {
                 res.status(400).json(erro)
             } else {
-                res.status(200).json(atendimento)
+                res.status(200).json(venda)
             }
             
         })
@@ -92,4 +92,4 @@ class Atendimento{
     }
    
 }
-module.exports = new Atendimento
+module.exports = new Venda
